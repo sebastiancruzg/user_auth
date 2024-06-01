@@ -8,6 +8,10 @@ app.disable('x-powered-by')
 app.use('/login', loginRouter)
 app.use('/register', registerRouter)
 
+app.use('*', async (req, res) => {
+  res.status(404).send('what??')
+})
+
 app.listen(3000, () => {
   console.log('listening on http://localhost:3000')
 })

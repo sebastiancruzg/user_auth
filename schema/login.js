@@ -1,7 +1,4 @@
-import z from 'zod'
+import { registerSchema } from './register.js'
 
-export const loginSchema = z.object({
-  username: z.string().min(5),
-  password: z.string().min(8)
-})
+export const loginSchema = registerSchema.omit({ age: true })
 
