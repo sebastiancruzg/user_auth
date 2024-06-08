@@ -1,10 +1,8 @@
 import bcrypt from 'bcrypt'
-import { pool } from '../postgress/db_connection.js'
 import { UserModel, AuthModel } from '../models/index.js'
 
 export class RegisterController {
   static async register (req, res) {
-    const client = await pool.connect()
     try {
       const getUser = await UserModel.getAll({ username: req.body.username })
 
@@ -26,8 +24,6 @@ export class RegisterController {
     } catch (error) {
       console.error('Error creating the user:', error)
       return res.status(500).send('Internal server error')
-    } finally {
-      client.release()
     }
   }
 }
