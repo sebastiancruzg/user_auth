@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt'
 import { pool } from '../postgress/db_connection.js'
-import { UserModel } from '../models/users.js'
+import { UserModel, AuthModel } from '../models/index.js'
 
 export class RegisterController {
   static async register (req, res) {
@@ -20,16 +20,7 @@ export class RegisterController {
         ...user
       }
 
-      const columns = Object.keys(newUser).join(',')
-      const values = Object.values(newUser)
-      const placeholders = values.map((_, index) => `$${index + 1}`).join(',')
-      const insertQuery = `INSERT INTO users
-      (${columns})
-      VALUES(${placeholders})
-      RETURNING username
-      `
-      const insertResult = await client.query(insertQuery, values)
-      const insertedUsername = insertResult.rows[0].username
+      const insertedUsername = await AuthModel.createUser(newUser)
 
       return res.status(201).send(`User ${insertedUsername} created successfully`)
     } catch (error) {
